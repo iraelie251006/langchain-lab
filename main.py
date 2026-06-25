@@ -8,6 +8,7 @@ load_dotenv()
 
 @tool('get_weather', description="Return weather information for a given city", return_direct=False)
 def get_weather(city: str):
+    """Get current conditions and a short forecast for a city."""
     response = requests.get(f'https://wttr.in/{city}?format=j1')
     return response.json()
 
@@ -19,9 +20,8 @@ agent = create_agent(
 
 response = agent.invoke({
     'messages': [
-        {'role': 'user', 'content': 'What is the weather like in Vienna?'}
+        {'role': 'user', 'content': 'What is the weather like in Arizona?'}
     ]
 })
 
-# print(response)
 print(response['messages'][-1].content)
