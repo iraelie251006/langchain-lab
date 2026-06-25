@@ -9,8 +9,25 @@ load_dotenv()
 @tool('get_weather', description="Return weather information for a given city", return_direct=False)
 def get_weather(city: str):
     """Get current conditions and a short forecast for a city."""
-    response = requests.get(f'https://wttr.in/{city}?format=j1')
-    return response.json()
+
+    try:
+        response = requests.get(f'https://wttr.in/{city}?format=j1', timeout=10)
+        response.raise_for_status()
+
+        data = response.json()
+        current = data['current_condition'][0]
+
+        return {
+            'city': city,
+            'temp_c': current['temp_C'],
+            'feels_like_c': current['FeelsLikeC'],
+            'description': current['weatherDesc'][0]['value'],
+            'humidity': current['humidity'],
+            'wind_kmph': current['windspeedKmph'],
+        }
+
+    except requests.RequestException as e:
+        return {'error': f'Could not fetch weather for {city}: {e}'}
 
 agent = create_agent(
     model = 'gpt-4.1-mini',
@@ -20,7 +37,7 @@ agent = create_agent(
 
 response = agent.invoke({
     'messages': [
-        {'role': 'user', 'content': 'What is the weather like in Arizona?'}
+        {'role': 'user', 'content': 'What is the weather like in Kigali?'}
     ]
 })
 
