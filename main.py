@@ -51,8 +51,8 @@ def get_country_info(country: str) -> dict:
 
 agent = create_agent(
     model = 'gpt-4.1-mini',
-    tools = [get_weather],
-    system_prompt = 'You are a helpful weather assistant, who always cracks jokes and is humorous while remaining helpful.'
+    tools = [get_weather, get_country_info],
+    system_prompt = 'You are a helpful weather and travel assistant who cracks jokes while remaining helpful.'
 )
 
 response = agent.invoke({
