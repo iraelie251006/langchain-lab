@@ -28,11 +28,31 @@ def get_weather(city: str):
 
     except requests.RequestException as e:
         return {'error': f'Could not fetch weather for {city}: {e}'}
+    
+@tool('get_country_info')
+def get_country_info(country: str) -> dict:
+    """Get key facts about a country: capital city, region, population,
+    currencies, and official languages. Use this when the user asks about
+    a country itself rather than weather conditions."""
+    try:
+        r = requests.get(f'https://restcountries.com/v3.1/name/{country}', timeout=10)
+        r.raise_for_status()
+        data = r.json()[0]
+        return {
+            'name': data['name']['common'],
+            'capital': data.get('capital', ['Unknown'])[0],
+            'region': data.get('region'),
+            'population': data.get('population'),
+            'currencies': list(data.get('currencies', {}).keys()),
+            'languages': list(data.get('languages', {}).values()),
+        }
+    except (requests.RequestException, IndexError, KeyError) as e:
+        return {'error': f'Could not fetch info for {country}: {e}'}
 
 agent = create_agent(
     model = 'gpt-4.1-mini',
     tools = [get_weather],
-    system_prompt = 'You are helpful weather assistant, who always cracks jokes and is humorous while remaining helpful.'
+    system_prompt = 'You are a helpful weather assistant, who always cracks jokes and is humorous while remaining helpful.'
 )
 
 response = agent.invoke({
