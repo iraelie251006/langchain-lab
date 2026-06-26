@@ -7,6 +7,8 @@ from langgraph.checkpoint.memory import InMemorySaver
 
 load_dotenv()
 
+checkpointer = InMemorySaver()
+
 @tool('get_weather', description="Return weather information for a given city", return_direct=False)
 def get_weather(city: str):
     """Get current conditions and a short forecast for a city."""
