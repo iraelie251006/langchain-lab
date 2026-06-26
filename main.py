@@ -57,8 +57,9 @@ agent = create_agent(
 
 response = agent.invoke({
     'messages': [
-        {'role': 'user', 'content': 'What is the weather like in Kigali?'}
+        {'role': 'user', 'content': "Compare the weather in Kigali and Nairobi."}
     ]
 })
 
-print(response['messages'][-1].content)
+for msg in response['messages']:
+    msg.pretty_print()
