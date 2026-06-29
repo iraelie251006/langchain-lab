@@ -1,4 +1,5 @@
 import requests
+import psutil
 from dotenv import load_dotenv
 
 from langchain.agents import create_agent
@@ -51,6 +52,18 @@ def get_country_info(country: str) -> dict:
         }
     except (requests.RequestException, IndexError, KeyError) as e:
         return {'error': f'Could not fetch info for {country}: {e}'}
+    
+@tool
+def check_system_health() -> str:
+    """Check current CPU usage, memory usage, and disk usage on this machine."""
+    cpu = psutil.cpu_percent(interval=1)
+    mem = psutil.virtual_memory()
+    disk = psutil.disk_usage("/")
+    return (
+        f"CPU: {cpu}%, "
+        f"Memory: {mem.percent}% used ({mem.used // (1024**2)}MB / {mem.total // (1024**2)}MB), "
+        f"Disk: {disk.percent}% used"
+    )
 
 agent = create_agent(
     model = 'gpt-4.1-mini',
