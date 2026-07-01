@@ -7,7 +7,7 @@ from langchain.agents import create_agent
 
 load_dotenv()
 
-llm = ChatOpenAI(model="gpt-4.1-mini")
+llm = ChatOpenAI(model="gpt-4.o-mini")
 
 class ResearchResponse(BaseModel):
     topic: str
