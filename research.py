@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+
 from pydantic import BaseModel
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import PydanticOutputParser
@@ -39,7 +40,7 @@ agent = create_agent(
 )
 
 response = agent.invoke({
-    "query": "what is the capital city of France?"
+    "query": "what is the capital city of Rwanda?"
 })
 
 print(response)
