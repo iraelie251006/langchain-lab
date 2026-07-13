@@ -4,7 +4,7 @@ career-roadmap assistant, powered by LangChain and OpenAI."""
 from dotenv import load_dotenv
 from langchain.agents import create_agent
 from langchain.chat_models import init_chat_model
-from langchain.messages import HumanMessage
+from langchain.messages import AIMessage, HumanMessage
 
 load_dotenv()
 
@@ -21,15 +21,20 @@ def build_agent():
     return create_agent(model=llm, tools=[], system_prompt=SYSTEM_PROMPT)
 
 
+def stream_response(agent, request: str) -> None:
+    """Stream the agent's answer for a single user request to stdout."""
+    question = HumanMessage(content=request)
+    for chunk in agent.stream({"messages": [question]}, stream_mode="messages"):
+        msg = chunk[0]
+        if isinstance(msg, AIMessage) and msg.content:
+            print(msg.content, end="", flush=True)
+    print()
+
+
 request = input("How can I help you today: ")
 
 agent = build_agent()
 
-question = HumanMessage(content=request)
-
-for chunk in agent.stream({"messages": [question]}, stream_mode="messages"):
-    msg = chunk[0]
-    if hasattr(msg, "content"):
-        print(msg.content, end="", flush=True)
+stream_response(agent, request)
 
 
