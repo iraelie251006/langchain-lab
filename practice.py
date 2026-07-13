@@ -36,16 +36,26 @@ def main() -> None:
     agent = build_agent()
     print("Ask me about breaking into Meta. Type 'exit' or 'quit' to leave.")
     while True:
-        request = input("\nHow can I help you today: ").strip()
+        try:
+            request = input("\nHow can I help you today: ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\nGoodbye!")
+            break
+
         if not request:
             print("Please enter a question.")
             continue
         if request.lower() in {"exit", "quit"}:
             print("Goodbye!")
             break
-        stream_response(agent, request)
+
+        try:
+            stream_response(agent, request)
+        except Exception as error:  # noqa: BLE001
+            print(f"\nSomething went wrong: {error}")
 
 
-main()
+if __name__ == "__main__":
+    main()
 
 
