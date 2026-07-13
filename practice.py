@@ -1,3 +1,6 @@
+"""Interactive CLI agent that acts as a Meta Senior Staff engineer
+career-roadmap assistant, powered by LangChain and OpenAI."""
+
 from dotenv import load_dotenv
 from langchain.agents import create_agent
 from langchain.chat_models import init_chat_model
