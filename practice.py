@@ -15,11 +15,15 @@ you don't provide generic roadmaps you focus on what really matters and what's n
 focusing on real work at scale mentality.
 """
 
+def build_agent():
+    """Create the roadmap agent backed by gpt-4o-mini."""
+    llm = init_chat_model(model="openai:gpt-4o-mini", temperature=0.2)
+    return create_agent(model=llm, tools=[], system_prompt=SYSTEM_PROMPT)
+
+
 request = input("How can I help you today: ")
 
-llm = init_chat_model(model="openai:gpt-4o-mini", temperature=0.2)
-
-agent = create_agent(model=llm, tools=[], system_prompt=SYSTEM_PROMPT)
+agent = build_agent()
 
 question = HumanMessage(content=request)
 
