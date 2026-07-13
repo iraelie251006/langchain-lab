@@ -31,10 +31,18 @@ def stream_response(agent, request: str) -> None:
     print()
 
 
-request = input("How can I help you today: ")
+def main() -> None:
+    """Run an interactive question/answer loop until the user exits."""
+    agent = build_agent()
+    print("Ask me about breaking into Meta. Type 'exit' or 'quit' to leave.")
+    while True:
+        request = input("\nHow can I help you today: ")
+        if request.lower() in {"exit", "quit"}:
+            print("Goodbye!")
+            break
+        stream_response(agent, request)
 
-agent = build_agent()
 
-stream_response(agent, request)
+main()
 
 
