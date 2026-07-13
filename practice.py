@@ -36,7 +36,10 @@ def main() -> None:
     agent = build_agent()
     print("Ask me about breaking into Meta. Type 'exit' or 'quit' to leave.")
     while True:
-        request = input("\nHow can I help you today: ")
+        request = input("\nHow can I help you today: ").strip()
+        if not request:
+            print("Please enter a question.")
+            continue
         if request.lower() in {"exit", "quit"}:
             print("Goodbye!")
             break
